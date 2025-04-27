@@ -1,0 +1,129 @@
+/* Global styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Login popup background */
+  .login-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  /* Main container for the login box */
+  .login-container {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    width: 380px;
+    max-width: 100%;
+  }
+  
+  /* Close button */
+  .close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 20px;
+    cursor: pointer;
+  }
+  
+  /* Header with logo text (OLX) */
+  .login-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .logo-text {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2563eb;
+  }
+  
+  /* Login options container */
+  .login-options {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Common styling for login options */
+  .login-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #d1d1d1;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .phone-login {
+    background-color: #f9f9f9;
+  }
+  
+  .google-login {
+    background-color: #f0f0f0;
+    border-color: #db4437;
+  }
+  
+  .phone-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .google-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .option-text {
+    margin-left: 12px;
+    font-size: 1rem;
+  }
+  
+  /* Styling for "OR" text */
+  .or-text {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  /* Styling for Email login */
+  .email-login-text {
+    text-align: center;
+    font-size: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #2563eb;
+  }
+  
+  /* Footer with privacy and terms text */
+  .footer-text {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 2rem;
+  }
+  
+  .privacy-text,
+  .terms-text {
+    margin-bottom: 0.5rem;
+  }
+  
+  .terms-link {
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  

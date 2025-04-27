@@ -1,0 +1,12 @@
+.footer {
+    background-color: #00695c; /* bg-cyan-950 equivalent */
+    height: 7rem; /* h-28 equivalent */
+    display: flex;
+    align-items: center;
+    padding-left: 1.5rem; /* pl-6 equivalent */
+}
+
+.footer-text {
+    color: white;
+    font-size: 1.25rem; /* adjust if needed */
+}
