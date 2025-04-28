@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import './SellPage.css';
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { Cloudinary } from '@cloudinary/url-gen';
+import { useUser } from '../../context/UserContext';
 
 const SellPage = () => {
   const [title, setTitle] = useState('');
@@ -17,6 +18,8 @@ const SellPage = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const { username } = useUser();
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -39,7 +42,6 @@ const SellPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form fields
     if (!title || !category || !price || !description || !image) {
       toast.error('Please fill in all required fields.');
       return;
@@ -51,17 +53,14 @@ const SellPage = () => {
     }
 
     try {
-      // Log image details for debugging
       console.log('Uploading image:', image);
 
-      // Initialize Cloudinary and get an upload URL
       const formData = new FormData();
       formData.append('file', image);
-      formData.append('upload_preset', 'Olx-store'); // Replace with your upload preset
+      formData.append('upload_preset', 'Olx-store'); 
 
       const uploadUrl = 'https://api.cloudinary.com/v1_1/dbslazpqx/image/upload';
 
-      // Make the API call to upload the image to Cloudinary
       const res = await fetch(uploadUrl, {
         method: 'POST',
         body: formData,
@@ -75,20 +74,18 @@ const SellPage = () => {
       const data = await res.json();
       const imageUrl = data.secure_url;
 
-      // Log image URL for debugging
       console.log('Image uploaded to:', imageUrl);
 
-      // Create the ad object with the image URL
       const newAd = {
         title,
         category,
         price,
         description,
         imageUrl,
+        username,
         createdAt: new Date(),
       };
 
-      // Save the ad to Firestore
       const db = getFirestore();
       await addDoc(collection(db, 'ads'), newAd);
 

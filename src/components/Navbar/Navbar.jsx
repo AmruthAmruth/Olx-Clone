@@ -26,12 +26,7 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-     
-        logout()
-    };
-
-    const handleSellClick = () => {
-        setLoginPop(true);
+       logout()
     };
 
     return (
