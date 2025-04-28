@@ -4,9 +4,9 @@ import { useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import './SellPage.css';  // Import the CSS file
+import './SellPage.css';
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { Cloudinary } from '@cloudinary/url-gen';
 
 const SellPage = () => {
   const [title, setTitle] = useState('');
@@ -34,9 +34,12 @@ const SellPage = () => {
     }
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate form fields
     if (!title || !category || !price || !description || !image) {
       toast.error('Please fill in all required fields.');
       return;
@@ -48,37 +51,52 @@ const SellPage = () => {
     }
 
     try {
-      const storage = getStorage();
-      const storageRef = ref(storage, `ads/${image.name}`);
+      // Log image details for debugging
+      console.log('Uploading image:', image);
 
-      // 1. Upload the image
-      await uploadBytes(storageRef, image);
+      // Initialize Cloudinary and get an upload URL
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('upload_preset', 'Olx-store'); // Replace with your upload preset
 
-      // 2. Get the download URL
-      const downloadURL = await getDownloadURL(storageRef);
+      const uploadUrl = 'https://api.cloudinary.com/v1_1/dbslazpqx/image/upload';
 
-      // 3. Create new ad object with real image URL
+      // Make the API call to upload the image to Cloudinary
+      const res = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Image upload failed: ${errorText}`);
+      }
+
+      const data = await res.json();
+      const imageUrl = data.secure_url;
+
+      // Log image URL for debugging
+      console.log('Image uploaded to:', imageUrl);
+
+      // Create the ad object with the image URL
       const newAd = {
         title,
         category,
         price,
         description,
-        imageUrl: downloadURL,
+        imageUrl,
         createdAt: new Date(),
       };
 
-      // 4. Save the ad to Firestore
+      // Save the ad to Firestore
       const db = getFirestore();
-      await addDoc(collection(db, "ads"), newAd);
-
-      console.log('New Ad:', newAd);
+      await addDoc(collection(db, 'ads'), newAd);
 
       toast.success('Ad posted successfully!');
       setTimeout(() => {
         navigate('/');
       }, 2000);
 
-      // Reset the form
       setTitle('');
       setCategory('');
       setPrice('');
@@ -86,10 +104,14 @@ const SellPage = () => {
       setImage(null);
       setPreviewImage(null);
     } catch (error) {
-      console.error("Error posting ad:", error);
+      console.error('Error posting ad:', error);
       toast.error('Failed to post ad.');
     }
-  };
+};
+
+
+
+
 
   const handleBackClick = () => {
     navigate('/');
@@ -160,10 +182,7 @@ const SellPage = () => {
 
             <div className="form-group">
               <label className="form-label">Upload Image *</label>
-              <div
-                className="image-upload-area"
-                onClick={handleImageClick}
-              >
+              <div className="image-upload-area" onClick={handleImageClick}>
                 <input
                   type="file"
                   ref={fileInputRef}
