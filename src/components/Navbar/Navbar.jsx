@@ -6,8 +6,12 @@ import search from "../../assets/search.svg";
 import sellButton from '../../assets/addButton.png';
 import locationIcon from '../../assets/location.svg';
 import './Navbar.css';
-
+import { useUser } from '../../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
+   
+    const { username, logout } = useUser();
+    const navigate=useNavigate()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [location, setLocation] = useState("Search city, area or locality");
     const [loginPop, setLoginPop] = useState(false);
@@ -21,8 +25,9 @@ const Navbar = () => {
         setIsDropdownOpen(false);
     };
 
-    const handleAuthClick = () => {
-        setLoginPop(true);
+    const handleLogout = () => {
+     
+        logout()
     };
 
     const handleSellClick = () => {
@@ -79,18 +84,18 @@ const Navbar = () => {
                     <img className="arrow-icon" src={arrow} alt="Arrow Icon" />
                 </div>
 
-                <p
+               {username ? <p onClick={handleLogout}>LogOut</p> :<p
                     className="auth-text"
-                    onClick={handleAuthClick}
+                    onClick={()=>navigate('/login')}
                 >
                     Login
                 </p>
-
+}
                 <img
                     src={sellButton}
                     alt="Sell Button"
                     className="sell-button"
-                    onClick={handleSellClick}
+                    onClick={()=>navigate('/sell')}
                 />
                 {loginPop && <Login setLoginPop={setLoginPop} />}
             </nav>

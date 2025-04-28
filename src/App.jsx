@@ -8,12 +8,14 @@ import ProductDetail from './pages/ProductDetail'
 const App = () => {
   return (
     <div>
+        
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/sell' element={<SellPage/>}/>
         <Route path='/details' element={<ProductDetail/>}/>
       </Routes>
+     
     </div>
   )
 }

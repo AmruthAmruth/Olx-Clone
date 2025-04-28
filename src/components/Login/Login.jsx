@@ -2,23 +2,33 @@ import React from 'react';
 import './Login.css'; // Importing the CSS file for styling
 import close from '../../assets/close.svg';
 import googleImg from '../../assets/google.png';
-
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../firebase/firebase';
+import { useNavigate } from "react-router-dom";
+import { useUser } from '../../context/UserContext';
 const Login = ({ setLoginPop }) => {
 
-  const googleSignIn = () => {
+const {login}=useUser()
+
+const navigate= useNavigate()
+  const googleSignIn = async() => {
     try {
-      // Dummy function for Google sign-in
-      console.log("Google Sign In Clicked");
-      setLoginPop(false);
-    } catch (error) {
-      console.log(error);
-    }
+        const result = await signInWithPopup(auth, provider);
+        console.log(result.user);
+        alert(`Welcome ${result.user.displayName}`);
+        login(result.user.displayName);
+        navigate('/')
+  
+      } catch (error) {
+        console.error(error);
+        alert('Login Failed');
+      }
   };
 
   return (
     <div className="login-popup">
       <div className="login-container">
-        {/* Close button */}
+        
         <img
           src={close}
           alt="Close"
@@ -26,12 +36,10 @@ const Login = ({ setLoginPop }) => {
           onClick={() => setLoginPop(false)}
         />
 
-        {/* OLX logo or text */}
         <div className="login-header">
           <h2 className="logo-text">OLX</h2>
         </div>
 
-        {/* Login options */}
         <div className="login-options">
           <div className="login-option phone-login">
             <svg width="22" height="22" viewBox="0 0 1024 1024" className="phone-icon">
@@ -49,7 +57,6 @@ const Login = ({ setLoginPop }) => {
           <h1 className="email-login-text">Login with Email</h1>
         </div>
 
-        {/* Footer text */}
         <div className="footer-text">
           <p className="privacy-text">
             All your personal details are safe with us.

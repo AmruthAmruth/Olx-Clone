@@ -5,12 +5,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import './SellPage.css';  // Import the CSS file
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const SellPage = () => {
-  const [title, setTitle] = useState('iPhone 12 for sale');
-  const [category, setCategory] = useState('Mobiles');
-  const [price, setPrice] = useState('50000');
-  const [description, setDescription] = useState('Brand new, unused, in box');
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const fileInputRef = useRef(null);
@@ -40,19 +42,35 @@ const SellPage = () => {
       return;
     }
 
+    if (isNaN(price) || parseFloat(price) <= 0) {
+      toast.error('Please enter a valid price.');
+      return;
+    }
+
     try {
-      // Dummy upload and data submission
-      const dummyImageUrl = URL.createObjectURL(image);  // Simulating the image upload
+      const storage = getStorage();
+      const storageRef = ref(storage, `ads/${image.name}`);
+
+      // 1. Upload the image
+      await uploadBytes(storageRef, image);
+
+      // 2. Get the download URL
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // 3. Create new ad object with real image URL
       const newAd = {
         title,
         category,
         price,
         description,
-        imageUrl: dummyImageUrl,
+        imageUrl: downloadURL,
         createdAt: new Date(),
       };
 
-      // Here, we're just simulating saving data.
+      // 4. Save the ad to Firestore
+      const db = getFirestore();
+      await addDoc(collection(db, "ads"), newAd);
+
       console.log('New Ad:', newAd);
 
       toast.success('Ad posted successfully!');
@@ -60,7 +78,7 @@ const SellPage = () => {
         navigate('/');
       }, 2000);
 
-      // Reset form state
+      // Reset the form
       setTitle('');
       setCategory('');
       setPrice('');
