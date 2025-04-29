@@ -10,12 +10,12 @@ import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
    
-    const { username, logout } = useUser();
+    const {  logout } = useUser();
     const navigate=useNavigate()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [location, setLocation] = useState("Search city, area or locality");
     const [loginPop, setLoginPop] = useState(false);
-
+    const username = localStorage.getItem('username');
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
@@ -26,6 +26,9 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('username');
+        console.log("removed");
+        
        logout()
     };
 

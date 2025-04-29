@@ -17,6 +17,7 @@ const navigate= useNavigate()
         console.log(result.user);
         alert(`Welcome ${result.user.displayName}`);
         login(result.user.displayName);
+        localStorage.setItem('username', result.user.displayName);
         navigate('/')
   
       } catch (error) {
