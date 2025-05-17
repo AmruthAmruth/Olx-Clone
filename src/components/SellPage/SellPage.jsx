@@ -20,7 +20,7 @@ const SellPage = () => {
   const navigate = useNavigate();
 
   const { username } = useUser();
-
+  const name = localStorage.getItem('username');
   const handleImageClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -82,7 +82,7 @@ const SellPage = () => {
         price,
         description,
         imageUrl,
-        username,
+        username:name,
         createdAt: new Date(),
       };
 

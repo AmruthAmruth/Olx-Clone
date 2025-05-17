@@ -11,20 +11,33 @@ const Login = ({ setLoginPop }) => {
 const {login}=useUser()
 
 const navigate= useNavigate()
-  const googleSignIn = async() => {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        console.log(result.user);
-        alert(`Welcome ${result.user.displayName}`);
-        login(result.user.displayName);
-        localStorage.setItem('username', result.user.displayName);
-        navigate('/')
   
-      } catch (error) {
-        console.error(error);
-        alert('Login Failed');
-      }
-  };
+
+let isSigningIn = false;
+
+const googleSignIn = async () => {
+  if (isSigningIn) return;
+  isSigningIn = true;
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+    console.log(result.user);
+    alert(`Welcome ${result.user.displayName}`);
+    login(result.user.displayName);
+    localStorage.setItem('username', result.user.displayName);
+    navigate('/');
+  } catch (error) {
+    console.error("Login failed:", error);
+
+    if (error.code === 'auth/cancelled-popup-request') {
+      alert('Login cancelled. Please try again.');
+    } else {
+      alert('Login failed. Please check your internet or try again later.');
+    }
+  } finally {
+    isSigningIn = false;
+  }
+};
 
   return (
     <div className="login-popup">

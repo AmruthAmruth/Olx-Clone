@@ -3,7 +3,7 @@ import SellPage from '../components/SellPage/SellPage'
 import Navbar from '../components/Navbar/Navbar'
 import Footer from '../components/Footer/Footer'
 
-const Sellpage = () => {
+const   Sellpage = () => {
   return (
     <div>
         <Navbar/>

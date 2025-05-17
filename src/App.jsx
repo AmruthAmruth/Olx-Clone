@@ -8,6 +8,7 @@ import ProductDetail from './pages/ProductDetail';
 const App = () => {
   
   const username = localStorage.getItem('username');
+console.log(username);
 
   return (
     <div>
@@ -30,7 +31,7 @@ const App = () => {
       
         <Route
           path="/details/:docId"
-          element={username ? <ProductDetail /> : <Navigate to="/login" replace />}
+          element={<ProductDetail/>}
         />
       </Routes>
     </div>
